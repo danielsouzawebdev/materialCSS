@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS na Prática</title>
+<meta name="description" content="CSS do zero ao avançado: seletores, box model, Flexbox, Grid, responsividade, animações e Sass.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">C</span>CSS na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html" aria-current="page">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow">material de estudo · CSS</p>
+    <h1>CSS, do seletor ao layout inteiro.</h1>
+    <p class="lede">Um material só sobre CSS, em três níveis. Os exemplos partem do HTML puro (sem estilo nenhum) e vão, módulo a módulo, até layouts responsivos completos.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="basico.html">Começar pelo Básico</a>
+      <a class="btn btn-ghost" href="#roteiro">Ver o roteiro completo</a>
+    </div>
+  </section>
+
+  <section class="concept">
+    <div class="inner">
+      <h2>A primeira coisa a entender: o box model</h2>
+      <p>Todo elemento HTML vira, na tela, uma caixa retangular — mesmo um link de texto simples. Essa caixa tem quatro camadas, de dentro para fora, e quase todo problema de "por que esse espaçamento está estranho" se resolve entendendo essas quatro camadas:</p>
+    </div>
+
+    <div class="boxmodel">
+      <div class="bm-margin">
+        <span class="bm-label">margin</span>
+        <div class="bm-border">
+          <span class="bm-label">border</span>
+          <div class="bm-padding">
+            <span class="bm-label">padding</span>
+            <div class="bm-content">content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner">
+      <p class="note">Isso volta em detalhe no primeiro módulo do nível Básico — por enquanto, só guarde a ordem: <strong>content → padding → border → margin</strong>, de dentro para fora.</p>
+
+      <h2>Como usar este material</h2>
+      <ul>
+        <li>Tenha a <a href="../html-site/basico.html">página de portfólio do material de HTML</a> pronta — é nela que os exercícios deste material vão ser aplicados.</li>
+        <li><strong>Editor:</strong> Visual Studio Code com a extensão Live Server, para ver cada mudança de CSS instantaneamente.</li>
+        <li><strong>Ferramentas do Desenvolvedor</strong> (<code>F12</code>) → aba Elements: clique em qualquer elemento da página e veja, do lado direito, o box model dele desenhado em tempo real.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="roadmap" id="roteiro">
+    <h2>O roteiro completo</h2>
+    <p class="lede">Três páginas, cada uma com vários módulos e um exercício ou projeto prático ao final.</p>
+
+    <div class="level-grid">
+      <a class="level-card" href="basico.html">
+        <span class="num">1</span>
+        <h3>Básico</h3>
+        <p>Como ligar CSS ao HTML e controlar o visual de elementos individuais.</p>
+        <ul>
+          <li>Como aplicar CSS</li>
+          <li>Seletores</li>
+          <li>Box model</li>
+          <li>Cores e unidades</li>
+          <li>Texto e fontes</li>
+          <li>Display</li>
+          <li>Background e bordas</li>
+          <li>Listas e estados de link</li>
+        </ul>
+      </a>
+
+      <a class="level-card" href="intermediario.html">
+        <span class="num">2</span>
+        <h3>Intermediário</h3>
+        <p>Organizar vários elementos juntos, e reagir a interação.</p>
+        <ul>
+          <li>Flexbox completo</li>
+          <li>Posicionamento e z-index</li>
+          <li>Pseudo-classes e pseudo-elementos</li>
+          <li>Variáveis CSS</li>
+          <li>Transições</li>
+          <li>calc() e clamp()</li>
+          <li>Overflow e scroll</li>
+          <li>Formulários estilizados</li>
+        </ul>
+      </a>
+
+      <a class="level-card" href="avancado.html">
+        <span class="num">3</span>
+        <h3>Avançado</h3>
+        <p>Layouts completos, responsivos, e CSS em escala de projeto.</p>
+        <ul>
+          <li>CSS Grid completo</li>
+          <li>Design responsivo</li>
+          <li>Animações</li>
+          <li>Especificidade e cascata</li>
+          <li>BEM</li>
+          <li>Modo escuro</li>
+          <li>CSS moderno (:has, aspect-ratio)</li>
+          <li>Introdução a Sass</li>
+        </ul>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  CSS na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

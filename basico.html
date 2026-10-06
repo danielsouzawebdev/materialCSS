@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Básico — CSS na Prática</title>
+<meta name="description" content="CSS básico: como aplicar CSS, seletores, box model, cores, unidades, texto, display, background e links.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">C</span>CSS na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html" aria-current="page">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" aria-current="page" href="basico.html">1 · Básico</a>
+    <a class="level-pill" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. Como aplicar CSS</a></li>
+      <li><a href="#m2">2. Seletores</a></li>
+      <li><a href="#m3">3. Box model</a></li>
+      <li><a href="#m4">4. Cores e unidades</a></li>
+      <li><a href="#m5">5. Texto e fontes</a></li>
+      <li><a href="#m6">6. Display</a></li>
+      <li><a href="#m7">7. Background e bordas</a></li>
+      <li><a href="#m8">8. Listas e estados de link</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 1 de 3</p>
+    <h1>CSS Básico</h1>
+    <p class="lede">Oito módulos curtos. No fim, você estiliza a página de portfólio do material de HTML inteira.</p>
+
+    <section id="m1">
+      <h2>1. Como aplicar CSS</h2>
+      <p>Existem três formas de ligar CSS a um HTML — na prática, você vai usar quase sempre a terceira:</p>
+      <pre><code>&lt;!-- 1. Inline: direto no atributo style. Evite — mistura conteúdo e estilo --&gt;
+&lt;p style="color: red;"&gt;Texto vermelho&lt;/p&gt;
+
+&lt;!-- 2. Interno: dentro de &lt;style&gt; no &lt;head&gt;. Serve para testes rápidos --&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    p { color: red; }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;!-- 3. Externo: um arquivo .css separado. O jeito certo para projetos reais --&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="estilo.css"&gt;
+&lt;/head&gt;</code></pre>
+      <p class="note">Um arquivo externo permite que <strong>uma</strong> folha de estilo controle várias páginas HTML ao mesmo tempo, e o navegador guarda esse arquivo em cache — carrega uma vez, reaproveita em todas as páginas do site.</p>
+    </section>
+
+    <section id="m2">
+      <h2>2. Seletores</h2>
+      <pre><code>/* por tag */
+p { color: #333; }
+
+/* por classe — a mais usada no dia a dia */
+.destaque { color: red; }
+
+/* por id — só existe um elemento com esse id na página */
+#topo { background: black; }
+
+/* descendente — todo &lt;a&gt; dentro de &lt;nav&gt;, em qualquer profundidade */
+nav a { text-decoration: none; }
+
+/* filho direto — só &lt;li&gt; que é filho IMEDIATO de &lt;ul&gt; */
+ul &gt; li { margin-bottom: 4px; }
+
+/* vários seletores com a mesma regra */
+h1, h2, h3 { font-family: sans-serif; }</code></pre>
+      <table>
+        <thead><tr><th>Seletor</th><th>Especificidade (prioridade)</th></tr></thead>
+        <tbody>
+          <tr><td>tag (<code>p</code>, <code>div</code>)</td><td>mais baixa</td></tr>
+          <tr><td>classe (<code>.destaque</code>)</td><td>média</td></tr>
+          <tr><td>id (<code>#topo</code>)</td><td>alta</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Prefira classes no lugar de ids para estilizar. Ids são únicos por página, o que torna difícil reaproveitar o estilo em outro elemento — guarde ids para âncoras de link e para o JavaScript.</p>
+    </section>
+
+    <section id="m3">
+      <h2>3. Box model</h2>
+      <p>Como visto na página inicial, todo elemento é uma caixa com quatro camadas:</p>
+      <pre><code>.caixa {
+  width: 200px;
+  padding: 16px;             /* espaço interno, entre o conteúdo e a borda */
+  border: 2px solid #333;
+  margin: 24px;               /* espaço externo, entre a caixa e os vizinhos */
+  box-sizing: border-box;     /* ver abaixo */
+}</code></pre>
+      <table>
+        <thead><tr><th>Camada</th><th>O que é</th></tr></thead>
+        <tbody>
+          <tr><td>content</td><td>o conteúdo em si (texto, imagem)</td></tr>
+          <tr><td>padding</td><td>respiro entre o conteúdo e a borda</td></tr>
+          <tr><td>border</td><td>a borda da caixa</td></tr>
+          <tr><td>margin</td><td>espaço entre esta caixa e as vizinhas; pode ser negativo</td></tr>
+        </tbody>
+      </table>
+      <h3>box-sizing: a armadilha mais comum do CSS</h3>
+      <pre><code>/* padrão do navegador: content-box */
+.caixa-a {
+  width: 200px;
+  padding: 20px;
+  border: 2px solid black;
+  /* largura REAL na tela: 200 + 20+20 + 2+2 = 244px */
+}
+
+/* com border-box, width já inclui padding e border */
+.caixa-b {
+  box-sizing: border-box;
+  width: 200px;
+  padding: 20px;
+  border: 2px solid black;
+  /* largura REAL na tela: exatamente 200px */
+}</code></pre>
+      <div class="callout warn">
+        <span class="label">Prática quase universal</span>
+        <p>Por isso praticamente todo projeto começa com este reset:</p>
+        <pre style="margin-top:0.6em"><code>* { box-sizing: border-box; }</code></pre>
+        <p>Isso faz <code>width</code> significar "largura total", sem precisar calcular padding e borda na mão.</p>
+      </div>
+    </section>
+
+    <section id="m4">
+      <h2>4. Cores e unidades</h2>
+      <pre><code>.texto {
+  color: #1572B6;              /* hexadecimal */
+  background: rgb(240 240 240); /* vermelho, verde, azul */
+  border-color: hsl(205 76% 40%); /* matiz, saturação, luminosidade */
+}</code></pre>
+      <table>
+        <thead><tr><th>Unidade</th><th>Relativa a</th><th>Quando usar</th></tr></thead>
+        <tbody>
+          <tr><td><code>px</code></td><td>nada — valor fixo</td><td>bordas finas, detalhes que não devem escalar</td></tr>
+          <tr><td><code>%</code></td><td>o elemento pai</td><td>larguras fluidas</td></tr>
+          <tr><td><code>em</code></td><td>o tamanho de fonte do próprio elemento</td><td>espaçamentos que devem crescer junto com o texto</td></tr>
+          <tr><td><code>rem</code></td><td>o tamanho de fonte da raiz (<code>html</code>)</td><td>tamanhos de fonte e espaçamento em geral — a mais usada</td></tr>
+        </tbody>
+      </table>
+      <p class="note"><code>rem</code> é previsível: <code>2rem</code> é sempre o dobro do tamanho base da página, não importa onde o elemento esteja aninhado. <code>em</code> acumula — um <code>em</code> dentro de outro <code>em</code> multiplica, o que surpreende quem não está esperando.</p>
+    </section>
+
+    <section id="m5">
+      <h2>5. Texto e fontes</h2>
+      <pre><code>body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #222;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+a {
+  text-decoration: underline;
+}
+
+.citacao {
+  font-style: italic;
+  letter-spacing: 0.02em;
+}</code></pre>
+      <table>
+        <thead><tr><th>Propriedade</th><th>Controla</th></tr></thead>
+        <tbody>
+          <tr><td><code>font-family</code></td><td>a fonte — liste opções de reserva (fallback), caso a primeira não exista</td></tr>
+          <tr><td><code>font-size</code></td><td>tamanho</td></tr>
+          <tr><td><code>font-weight</code></td><td>peso — 400 é normal, 700 é negrito</td></tr>
+          <tr><td><code>line-height</code></td><td>altura da linha — sem unidade (ex: <code>1.6</code>) escala com o font-size</td></tr>
+          <tr><td><code>text-align</code></td><td>alinhamento horizontal do texto</td></tr>
+          <tr><td><code>letter-spacing</code></td><td>espaço entre letras</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="m6">
+      <h2>6. Display</h2>
+      <pre><code>span { display: inline; }         /* ocupa só o espaço do conteúdo, lado a lado, ignora width/height */
+div  { display: block; }           /* ocupa a linha inteira, aceita width/height */
+.btn { display: inline-block; }    /* lado a lado, mas aceita width/height */
+.oculto { display: none; }         /* some da página — não ocupa espaço nenhum */</code></pre>
+      <div class="demo">
+        <p class="demo-label">Diferença visual</p>
+        <span style="background:var(--accent-tint); padding:4px 8px; border-radius:4px">inline</span>
+        <span style="background:var(--accent-tint); padding:4px 8px; border-radius:4px">fica ao lado</span>
+        <div style="background:var(--accent); color:#fff; padding:6px 10px; border-radius:4px; margin-top:8px; display:inline-block">block ocupa a linha inteira</div>
+      </div>
+      <p class="note"><code>display: none</code> é diferente de deixar invisível mantendo o espaço — isso é <code>visibility: hidden</code>, que será visto no nível Intermediário junto de outras formas de esconder elementos.</p>
+    </section>
+
+    <section id="m7">
+      <h2>7. Background e bordas</h2>
+      <pre><code>.card {
+  background-color: #f5f5f5;
+  background-image: url("textura.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;         /* cantos arredondados */
+  border-top: 4px solid #1572B6; /* borda só de um lado */
+}</code></pre>
+      <p class="note"><code>background-size: cover</code> faz a imagem preencher todo o elemento sem distorcer, cortando o excesso — é o que quase todo banner de site usa. <code>contain</code> faz o oposto: encolhe a imagem até caber inteira, sem cortar nada.</p>
+    </section>
+
+    <section id="m8">
+      <h2>8. Listas e estados de link</h2>
+      <pre><code>ul {
+  list-style: none;    /* remove as bolinhas padrão */
+  padding: 0;
+}
+
+a:link    { color: blue; }     /* nunca visitado */
+a:visited { color: purple; }   /* já visitado */
+a:hover   { color: red; }      /* mouse em cima */
+a:active  { color: orange; }   /* no exato momento do clique */</code></pre>
+      <p class="note">A ordem importa: escreva sempre <code>link, visited, hover, active</code> nessa sequência (um truque de memorização comum é "LoVe HAte"). Fora de ordem, um estado posterior na folha de estilo pode silenciosamente sobrescrever um anterior.</p>
+      <div class="callout">
+        <span class="label">Exercício</span>
+        <p>Remova as bolinhas de uma lista de navegação e transforme cada <code>li</code> em um item horizontal lado a lado usando <code>display: inline-block</code> — a base de um menu, antes de aprender Flexbox no próximo nível.</p>
+      </div>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: estilize o portfólio</h2>
+      <p>Pegue a página de portfólio pessoal que você montou no material de HTML Básico (ou crie uma nova com a mesma estrutura) e aplique:</p>
+      <ul class="checklist">
+        <li>Um arquivo <code>estilo.css</code> externo, ligado via <code>&lt;link&gt;</code></li>
+        <li><code>* { box-sizing: border-box; }</code> logo no topo do arquivo</li>
+        <li>Uma paleta de no máximo três cores, usando <code>hex</code> ou <code>hsl</code></li>
+        <li>Uma fonte diferente da padrão do navegador, com fallback</li>
+        <li>O <code>header</code> com background de cor sólida e os links do <code>nav</code> sem sublinhado, virando sublinhado só no <code>:hover</code></li>
+        <li>As fotos ou avatar com <code>border-radius</code> para ficarem arredondadas</li>
+      </ul>
+    </section>
+
+    <div class="pagefoot">
+      <a href="index.html">← Início</a>
+      <a href="intermediario.html">Próximo: Intermediário →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  CSS na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

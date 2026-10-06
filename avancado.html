@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Avançado — CSS na Prática</title>
+<meta name="description" content="CSS avançado: Grid completo, design responsivo, animações, especificidade, BEM, modo escuro e Sass.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">C</span>CSS na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html" aria-current="page">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" href="basico.html">1 · Básico</a>
+    <a class="level-pill" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" aria-current="page" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. CSS Grid completo</a></li>
+      <li><a href="#m2">2. Design responsivo</a></li>
+      <li><a href="#m3">3. Animações</a></li>
+      <li><a href="#m4">4. Especificidade e cascata</a></li>
+      <li><a href="#m5">5. Metodologia BEM</a></li>
+      <li><a href="#m6">6. Modo escuro</a></li>
+      <li><a href="#m7">7. CSS moderno</a></li>
+      <li><a href="#m8">8. Introdução a Sass</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 3 de 3</p>
+    <h1>CSS Avançado</h1>
+    <p class="lede">Pré-requisito: <a href="intermediario.html">CSS Intermediário</a>. Aqui o assunto é montar — e manter — layouts completos em projetos reais.</p>
+
+    <section id="m1">
+      <h2>1. CSS Grid completo</h2>
+      <p>Enquanto Flexbox organiza uma direção por vez, Grid organiza linhas <em>e</em> colunas simultaneamente — o layout da página inteira em uma regra só.</p>
+      <pre><code>.pagina {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar conteudo"
+    "sidebar rodape";
+  min-height: 100vh;
+  gap: 1.5rem;
+}
+
+.sidebar  { grid-area: sidebar; }
+.header   { grid-area: header; }
+.conteudo { grid-area: conteudo; }
+.rodape   { grid-area: rodape; }</code></pre>
+      <div class="demo">
+        <p class="demo-label">display: grid; grid-template-columns: repeat(3, 1fr);</p>
+        <div class="demo-grid"><div>1</div><div>2</div><div>3</div></div>
+      </div>
+      <h3>Grid fluido, sem media query</h3>
+      <pre><code>.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}</code></pre>
+      <p><code>auto-fit</code> com <code>minmax(200px, 1fr)</code> é um dos truques mais úteis do CSS moderno: cada coluna tem no mínimo 200px, e o navegador decide sozinho quantas colunas cabem na largura disponível, sem escrever nenhuma <code>@media</code>.</p>
+      <table>
+        <thead><tr><th>Grid</th><th>Flexbox</th></tr></thead>
+        <tbody>
+          <tr><td>Duas dimensões (linha + coluna)</td><td>Uma dimensão por vez</td></tr>
+          <tr><td>Define o layout a partir do container pai</td><td>Itens se ajustam uns aos outros</td></tr>
+          <tr><td>Bom para: a estrutura da página inteira</td><td>Bom para: alinhar itens de um componente (menu, barra de botões)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="m2">
+      <h2>2. Design responsivo</h2>
+      <pre><code>/* mobile-first: regra geral pensada para a tela pequena */
+.cartoes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .cartoes { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .cartoes { grid-template-columns: repeat(3, 1fr); }
+}</code></pre>
+      <p>Essa ordem — regra geral primeiro, depois <code>min-width</code> crescente — é <strong>mobile-first</strong>: desenhar para a tela pequena por padrão, e abrir mais espaço conforme a tela cresce. É mais fácil de manter do que o caminho contrário (desktop-first com <code>max-width</code>), porque a maioria dos projetos atende mais visitas em celular do que em desktop.</p>
+      <h3>Container queries</h3>
+      <pre><code>.sidebar {
+  container-type: inline-size;
+}
+
+@container (min-width: 300px) {
+  .card { display: flex; }
+}</code></pre>
+      <p class="note">Diferente de <code>@media</code> (que reage ao tamanho da <strong>tela</strong>), <code>@container</code> reage ao tamanho do <strong>elemento pai</strong> — o mesmo componente pode ter um layout diferente dependendo de estar numa sidebar estreita ou numa área larga, independente do tamanho da tela inteira.</p>
+    </section>
+
+    <section id="m3">
+      <h2>3. Animações</h2>
+      <pre><code>@keyframes aparecer {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.toast {
+  animation: aparecer 0.3s ease-out;
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+
+.notificacao {
+  animation: pulsar 1.5s ease-in-out infinite;
+}</code></pre>
+      <table>
+        <thead><tr><th>Parte do shorthand</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>nome da animação</td><td><code>aparecer</code></td></tr>
+          <tr><td>duração</td><td><code>0.3s</code></td></tr>
+          <tr><td>timing function</td><td><code>ease-out</code></td></tr>
+          <tr><td>repetição</td><td><code>infinite</code>, ou um número de vezes</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Diferença para <code>transition</code>: transição precisa de um gatilho (<code>:hover</code>, uma classe adicionada via JS); <code>@keyframes</code> roda sozinha, com controle fino de várias etapas intermediárias (os <code>0%</code>, <code>50%</code>, <code>100%</code>).</p>
+    </section>
+
+    <section id="m4">
+      <h2>4. Especificidade e cascata</h2>
+      <p>Quando duas regras miram o mesmo elemento, o navegador decide por uma combinação de três fatores, nesta ordem de prioridade:</p>
+      <ol>
+        <li><strong>Importância:</strong> uma regra com <code>!important</code> vence quase tudo (evite usar)</li>
+        <li><strong>Especificidade:</strong> id &gt; classe &gt; tag, somando pontos por seletor combinado</li>
+        <li><strong>Ordem no arquivo:</strong> em caso de empate, quem vem depois vence</li>
+      </ol>
+      <pre><code>#topo { color: red; }           /* especificidade: 1 id = mais alta */
+.aviso { color: blue; }          /* especificidade: 1 classe */
+p { color: green; }              /* especificidade: 1 tag = mais baixa */
+
+/* mesmo com p vindo por último no arquivo, #topo ainda vence,
+   porque id tem especificidade maior */</code></pre>
+      <h3>@layer: organizando a cascata de propósito</h3>
+      <pre><code>@layer reset, base, componentes, utilitarios;
+
+@layer reset {
+  * { margin: 0; padding: 0; }
+}
+
+@layer componentes {
+  .botao { padding: 0.6em 1.2em; }
+}</code></pre>
+      <p><code>@layer</code> (CSS moderno) deixa explícita a ordem de prioridade entre blocos inteiros de CSS, independente da especificidade de cada seletor dentro deles — uma camada declarada depois sempre vence uma anterior, o que torna grandes projetos mais previsíveis.</p>
+    </section>
+
+    <section id="m5">
+      <h2>5. Metodologia BEM</h2>
+      <pre><code>&lt;div class="cartao cartao--destaque"&gt;
+  &lt;h3 class="cartao__titulo"&gt;Título&lt;/h3&gt;
+  &lt;p class="cartao__texto"&gt;Texto&lt;/p&gt;
+  &lt;button class="cartao__botao cartao__botao--desabilitado"&gt;Comprar&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      <pre><code>.cartao { }                      /* Block */
+.cartao__titulo { }              /* Element: bloco__elemento */
+.cartao--destaque { }            /* Modifier: bloco--modificador */
+.cartao__botao--desabilitado { } /* Modifier de um elemento */</code></pre>
+      <p>BEM (Block, Element, Modifier) organiza nomes de classe para que toda classe tenha a <strong>mesma</strong> especificidade (uma classe só) — isso elimina brigas de prioridade, porque a ordem no arquivo passa a ser o único fator de desempate, de forma previsível.</p>
+    </section>
+
+    <section id="m6">
+      <h2>6. Modo escuro</h2>
+      <pre><code>:root {
+  --bg: #ffffff;
+  --texto: #14181F;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14181F;
+    --texto: #f0f0f0;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--texto);
+}</code></pre>
+      <p><code>prefers-color-scheme</code> lê a preferência de tema que o próprio usuário já configurou no sistema operacional — a maioria dos sites modernos nem precisa de um botão de alternância manual, o tema certo já aparece sozinho.</p>
+      <h3>Alternância manual (combinada com JS)</h3>
+      <pre><code>&lt;html data-tema="escuro"&gt;</code></pre>
+      <pre><code>[data-tema="escuro"] {
+  --bg: #14181F;
+  --texto: #f0f0f0;
+}</code></pre>
+      <p class="note">Quando existe um botão de troca manual, o padrão é um atributo como <code>data-tema</code> no <code>&lt;html&gt;</code>, alternado por um pequeno script — o CSS só reage ao valor do atributo, sem precisar saber como ele foi alterado.</p>
+    </section>
+
+    <section id="m7">
+      <h2>7. CSS moderno</h2>
+      <pre><code>/* :has() — selecionar um PAI baseado no filho, finalmente possível */
+.card:has(img) { padding-top: 0; }
+form:has(input:invalid) { border-color: red; }
+
+/* aspect-ratio — proporção fixa sem hack de padding-top */
+.video-wrapper { aspect-ratio: 16 / 9; }
+
+/* propriedades lógicas — pensam em "início/fim" em vez de "esquerda/direita",
+   funcionam automaticamente em idiomas da direita para a esquerda */
+.card { margin-inline-start: 1rem; padding-block: 0.5rem; }</code></pre>
+      <table>
+        <thead><tr><th>Recurso</th><th>Resolve</th></tr></thead>
+        <tbody>
+          <tr><td><code>:has()</code></td><td>estilizar um elemento com base no que tem dentro dele — antes só dava com JavaScript</td></tr>
+          <tr><td><code>aspect-ratio</code></td><td>manter proporção (como 16:9 de vídeo) sem truques de padding percentual</td></tr>
+          <tr><td>propriedades lógicas</td><td>layouts que funcionam em idiomas da direita para a esquerda (árabe, hebraico) sem CSS duplicado</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="m8">
+      <h2>8. Introdução a Sass</h2>
+      <p>Sass é um pré-processador: você escreve <code>.scss</code>, uma ferramenta compila para <code>.css</code> normal antes de ir ao navegador — nada de Sass chega a rodar "ao vivo".</p>
+      <pre><code>// variáveis (diferente de --var, viram valor fixo após compilar)
+$cor-principal: #1572B6;
+$espaco: 1rem;
+
+// aninhamento — reflete a estrutura do HTML
+.menu {
+  display: flex;
+
+  a {
+    color: $cor-principal;
+
+    &:hover {       // o & representa o próprio .menu a
+      text-decoration: underline;
+    }
+  }
+}
+
+// mixin — um "bloco de CSS" reutilizável, com parâmetros
+@mixin botao($cor) {
+  padding: 0.6em 1.2em;
+  background: $cor;
+  border-radius: 6px;
+}
+
+.botao-primario { @include botao($cor-principal); }
+.botao-perigo   { @include botao(#c0392b); }</code></pre>
+      <p class="note">Essa é exatamente a mecânica por trás da customização do Bootstrap (visto no material de Bootstrap Avançado) — sobrescrever variáveis Sass antes de importar a biblioteca inteira.</p>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: landing page completa</h2>
+      <ul class="checklist">
+        <li>Layout de página inteira com <code>CSS Grid</code> (header, conteúdo, rodapé)</li>
+        <li>Uma seção de cards com <code>auto-fit</code>/<code>minmax</code>, sem nenhuma <code>@media</code> para as colunas</li>
+        <li>Pelo menos uma animação de entrada com <code>@keyframes</code></li>
+        <li>Suporte a modo escuro via <code>prefers-color-scheme</code></li>
+        <li>Classes nomeadas seguindo BEM</li>
+        <li>Testado em pelo menos três larguras de tela (celular, tablet, desktop) usando o modo responsivo do DevTools</li>
+      </ul>
+      <div class="callout">
+        <span class="label">Para onde ir depois</span>
+        <p>Com HTML e CSS avançados dominados, o próximo passo é <strong>JavaScript</strong> — é ele que transforma essas páginas estáticas em algo interativo: formulários que validam de verdade, dados vindos de um servidor, interfaces que mudam sem recarregar a página.</p>
+      </div>
+    </section>
+
+    <div class="pagefoot">
+      <a href="intermediario.html">← Intermediário</a>
+      <a href="index.html">Voltar ao início →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  CSS na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

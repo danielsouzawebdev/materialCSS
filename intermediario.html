@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Intermediário — CSS na Prática</title>
+<meta name="description" content="CSS intermediário: Flexbox completo, posicionamento, pseudo-classes, variáveis, transições e formulários estilizados.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">C</span>CSS na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html" aria-current="page">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" href="basico.html">1 · Básico</a>
+    <a class="level-pill" aria-current="page" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. Flexbox completo</a></li>
+      <li><a href="#m2">2. Posicionamento e z-index</a></li>
+      <li><a href="#m3">3. Pseudo-classes e pseudo-elementos</a></li>
+      <li><a href="#m4">4. Variáveis CSS</a></li>
+      <li><a href="#m5">5. Transições</a></li>
+      <li><a href="#m6">6. calc() e clamp()</a></li>
+      <li><a href="#m7">7. Overflow e scroll</a></li>
+      <li><a href="#m8">8. Formulários estilizados</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 2 de 3</p>
+    <h1>CSS Intermediário</h1>
+    <p class="lede">Pré-requisito: <a href="basico.html">CSS Básico</a>. Aqui o foco muda de estilizar um elemento sozinho para organizar vários juntos.</p>
+
+    <section id="m1">
+      <h2>1. Flexbox completo</h2>
+      <p>Flexbox alinha itens em uma única direção — linha ou coluna — distribuindo o espaço entre eles.</p>
+      <pre><code>.menu {
+  display: flex;
+  flex-direction: row;           /* row (padrão) ou column */
+  justify-content: space-between; /* eixo principal */
+  align-items: center;            /* eixo cruzado */
+  flex-wrap: wrap;                /* quebra linha se não couber */
+  gap: 1rem;
+}</code></pre>
+      <div class="demo">
+        <p class="demo-label">display: flex; justify-content: space-between;</p>
+        <div class="demo-flex" style="justify-content:space-between"><div>Logo</div><div>Menu</div><div>Login</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Propriedade do container</th><th>Controla</th></tr></thead>
+        <tbody>
+          <tr><td><code>justify-content</code></td><td>flex-start, center, space-between, space-around, space-evenly</td></tr>
+          <tr><td><code>align-items</code></td><td>flex-start, center, flex-end, stretch (padrão)</td></tr>
+          <tr><td><code>flex-wrap</code></td><td>nowrap (padrão) ou wrap</td></tr>
+        </tbody>
+      </table>
+      <h3>Propriedades dos itens</h3>
+      <pre><code>.item-principal {
+  flex-grow: 2;    /* cresce 2x mais que os irmãos quando sobra espaço */
+  flex-shrink: 1;  /* pode encolher se faltar espaço */
+  flex-basis: 200px; /* tamanho de partida, antes de crescer/encolher */
+}
+
+.item-ao-final {
+  order: 99;        /* muda a ordem visual, sem mudar o HTML */
+}
+
+.item-sozinho {
+  align-self: flex-end; /* sobrescreve o align-items só para este item */
+}</code></pre>
+      <p class="note"><code>flex: 1</code> é um atalho muito comum — equivale a <code>flex-grow: 1; flex-shrink: 1; flex-basis: 0;</code>, e faz o item crescer para ocupar todo espaço disponível, dividido igualmente com outros itens com <code>flex: 1</code>.</p>
+    </section>
+
+    <section id="m2">
+      <h2>2. Posicionamento e z-index</h2>
+      <pre><code>.normal   { position: static; }    /* padrão, segue o fluxo da página */
+.relativo { position: relative; top: 4px; left: 4px; }
+.absoluto { position: absolute; top: 0; right: 0; }
+.fixo     { position: fixed; bottom: 0; }
+.grudento  { position: sticky; top: 0; }</code></pre>
+      <table>
+        <thead><tr><th>Valor</th><th>Comportamento</th></tr></thead>
+        <tbody>
+          <tr><td><code>static</code></td><td>padrão — segue o fluxo normal da página, <code>top</code>/<code>left</code> não fazem nada</td></tr>
+          <tr><td><code>relative</code></td><td>desloca a partir de onde o elemento estaria normalmente, sem afetar os outros</td></tr>
+          <tr><td><code>absolute</code></td><td>sai do fluxo; posiciona relativo ao ancestral posicionado mais próximo</td></tr>
+          <tr><td><code>fixed</code></td><td>fixo na janela do navegador, mesmo rolando a página</td></tr>
+          <tr><td><code>sticky</code></td><td>normal até atingir um limite de rolagem, depois gruda</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <span class="label">A armadilha do absolute</span>
+        <p><code>position: absolute</code> só funciona de forma previsível se algum elemento <strong>pai</strong> tiver <code>position: relative</code> — senão ele se posiciona relativo à página inteira (o <code>&lt;html&gt;</code>), o que raramente é a intenção.</p>
+      </div>
+      <h3>z-index</h3>
+      <pre><code>.modal { position: fixed; z-index: 100; }
+.overlay { position: fixed; z-index: 90; }</code></pre>
+      <p><code>z-index</code> só tem efeito em elementos posicionados (qualquer <code>position</code> diferente de <code>static</code>) — e decide qual fica "por cima" quando dois se sobrepõem. Maior valor, mais para frente.</p>
+    </section>
+
+    <section id="m3">
+      <h2>3. Pseudo-classes e pseudo-elementos</h2>
+      <pre><code>a:hover { color: red; }
+input:focus { border-color: blue; }
+input:disabled { opacity: 0.5; }
+
+li:first-child { font-weight: bold; }
+li:last-child { border-bottom: none; }
+li:nth-child(2n) { background: #f5f5f5; }   /* itens pares */
+li:nth-child(odd) { background: #fff; }      /* itens ímpares */
+
+p::first-letter { font-size: 2em; }
+li::before { content: "→ "; }
+input::placeholder { color: #999; }</code></pre>
+      <p>Pseudo-<strong>classes</strong> (um dois-pontos, <code>:hover</code>) selecionam um elemento que já existe, num certo estado. Pseudo-<strong>elementos</strong> (dois dois-pontos, <code>::before</code>) criam algo que não existe no HTML — útil para ícones decorativos ou numeração customizada, sem poluir o HTML com elementos vazios só para estilo.</p>
+    </section>
+
+    <section id="m4">
+      <h2>4. Variáveis CSS</h2>
+      <pre><code>:root {
+  --cor-principal: #1572B6;
+  --cor-texto: #222;
+  --espaco: 1rem;
+  --raio: 8px;
+}
+
+.botao {
+  background: var(--cor-principal);
+  padding: var(--espaco);
+  border-radius: var(--raio);
+}
+
+/* com valor de reserva, caso a variável não exista */
+.card { padding: var(--espaco-card, 1rem); }</code></pre>
+      <p>Diferente de uma variável do Sass (que vira um valor fixo depois de compilado), uma variável CSS continua viva no navegador — pode ser lida e alterada por JavaScript em tempo real, e seu valor pode mudar dependendo de onde ela é redefinida na árvore do documento.</p>
+      <div class="callout">
+        <span class="label">Por que isso importa</span>
+        <p>Trocar a cor principal do site inteiro passa a ser mudar <strong>uma linha</strong> em <code>:root</code>, em vez de caçar a cor em dezenas de regras espalhadas pelo arquivo.</p>
+      </div>
+    </section>
+
+    <section id="m5">
+      <h2>5. Transições</h2>
+      <pre><code>.card {
+  transform: translateY(0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}</code></pre>
+      <table>
+        <thead><tr><th>Parte</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>propriedade</td><td><code>transform</code>, <code>opacity</code>, <code>background-color</code>...</td></tr>
+          <tr><td>duração</td><td><code>0.2s</code>, <code>200ms</code></td></tr>
+          <tr><td>timing function</td><td><code>ease</code>, <code>linear</code>, <code>ease-in-out</code></td></tr>
+        </tbody>
+      </table>
+      <p class="note">Anime <code>transform</code> e <code>opacity</code> sempre que possível — o navegador consegue acelerar essas duas por hardware. Animar <code>width</code>, <code>top</code> ou <code>margin</code> funciona, mas é mais pesado para o navegador recalcular.</p>
+    </section>
+
+    <section id="m6">
+      <h2>6. calc() e clamp()</h2>
+      <pre><code>.sidebar {
+  width: calc(100% - 240px);  /* mistura unidades diferentes numa só conta */
+}
+
+h1 {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  /* nunca menor que 1.5rem, nunca maior que 3rem,
+     e cresce com a largura da tela (4vw) entre esses limites */
+}</code></pre>
+      <p><code>calc()</code> faz contas misturando unidades que normalmente não dariam para combinar (porcentagem com pixels, por exemplo). <code>clamp(mínimo, ideal, máximo)</code> resolve um problema comum de tipografia responsiva — texto que escala suavemente com a tela, mas sem nunca ficar ilegível de tão pequeno, nem gigante demais.</p>
+    </section>
+
+    <section id="m7">
+      <h2>7. Overflow e scroll</h2>
+      <pre><code>.caixa {
+  height: 200px;
+  overflow-y: auto;    /* barra de rolagem só se o conteúdo não couber */
+}
+
+.galeria {
+  display: flex;
+  overflow-x: scroll;   /* sempre com barra de rolagem horizontal */
+  scroll-snap-type: x mandatory;
+}
+.galeria img { scroll-snap-align: start; }</code></pre>
+      <table>
+        <thead><tr><th>Valor</th><th>Comportamento</th></tr></thead>
+        <tbody>
+          <tr><td><code>visible</code></td><td>padrão — conteúdo que não cabe vaza para fora da caixa</td></tr>
+          <tr><td><code>hidden</code></td><td>corta o que não cabe, sem barra de rolagem</td></tr>
+          <tr><td><code>scroll</code></td><td>sempre mostra a barra de rolagem</td></tr>
+          <tr><td><code>auto</code></td><td>mostra a barra só quando necessário</td></tr>
+        </tbody>
+      </table>
+      <p><code>scroll-snap-type</code> é o que faz carrosséis de imagem "encaixarem" ao parar de arrastar, sem precisar de nenhuma linha de JavaScript.</p>
+    </section>
+
+    <section id="m8">
+      <h2>8. Formulários estilizados</h2>
+      <pre><code>input, textarea, select {
+  font: inherit;        /* herda a fonte da página, em vez da fonte padrão do sistema */
+  padding: 0.6em 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #1572B6;
+  box-shadow: 0 0 0 3px rgba(21, 114, 182, 0.2);
+}
+
+input:invalid:not(:placeholder-shown) {
+  border-color: #c0392b;
+}
+
+input:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}</code></pre>
+      <p class="note">Nunca remova o <code>outline</code> no <code>:focus</code> sem colocar algo visível no lugar (como o <code>box-shadow</code> acima) — sem indicação visual de foco, quem navega só pelo teclado perde completamente a noção de onde está na página.</p>
+      <div class="callout">
+        <span class="label">Exercício</span>
+        <p>Construa um menu de navegação horizontal com Flexbox (<code>justify-content: space-between</code>), onde os links ganham sublinhado animado com <code>transition</code> no <code>:hover</code>, usando <code>position: sticky</code> para o menu grudar no topo ao rolar a página.</p>
+      </div>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: cards de produto responsivos</h2>
+      <p>Monte uma seção com 4 a 6 "cards" de produto (imagem, título, preço, botão), usando:</p>
+      <ul class="checklist">
+        <li>Flexbox com <code>flex-wrap: wrap</code> para os cards quebrarem linha naturalmente</li>
+        <li>Variáveis CSS em <code>:root</code> para a cor principal e o espaçamento padrão</li>
+        <li>Uma transição suave de elevação (<code>transform</code> + <code>box-shadow</code>) no <code>:hover</code> de cada card</li>
+        <li>O botão de "Comprar" com estados <code>:hover</code> e <code>:focus</code> visualmente diferentes</li>
+        <li>Um cabeçalho fixo no topo com <code>position: sticky</code></li>
+      </ul>
+    </section>
+
+    <div class="pagefoot">
+      <a href="basico.html">← Básico</a>
+      <a href="avancado.html">Próximo: Avançado →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  CSS na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>
